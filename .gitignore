@@ -52,7 +52,6 @@ target/
 lib_managed/
 src_managed/
 project/boot/
-scratch/
 .history
 .cache
 
