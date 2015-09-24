@@ -28,8 +28,6 @@ trait SimplyAddToSorted {
   implicit def sortedCons[S <: Coproduct, K, V, T <: HList, O <: Coproduct](implicit
     others: Aux[V:+:S, T, O]
   ): Aux[S, FieldType[K, V] :: T, V :+: O] = new Sorted[S, FieldType[K, V] :: T] { type Out = V :+: O }
-  
-  
 }
 
 trait AddSubsortsToSorted extends SimplyAddToSorted {
@@ -54,19 +52,7 @@ trait AddSubsortsToSorted extends SimplyAddToSorted {
   ): Aux[S, FieldType[K, V] :: T, O2] = new Sorted[S, FieldType[K, V] :: T] { type Out = O2 }
 }
 
-/*trait AvoidDuplicatesInSorted extends AddSubsortsToSorted {
- implicit def sortedSkipCCons[S <: Coproduct, K, V, T <: Coproduct, O <: Coproduct](implicit
-    present: Selector[S, V],
-    others: Aux[S, T, O]
-  ): Aux[S, FieldType[K, V] :+: T, O] = new Sorted[S, FieldType[K, V] :+: T] { type Out = O }
- 
-  implicit def sortedSkipHCons[S <: Coproduct, K, V, T <: HList, O <: Coproduct](implicit
-    present: Selector[S, V],
-    others: Aux[S, T, O]    
-  ): Aux[S, FieldType[K, V] :: T, O] = new Sorted[S, FieldType[K, V] :: T] { type Out = O }
-}*/
-
-trait GenericSorted extends AddSubsortsToSorted /*AvoidDuplicatesInSorted*/ {
+trait GenericSorted extends AddSubsortsToSorted {
   implicit def sortedLabelledGeneric[S <: Coproduct, T, G, C <: Coproduct](implicit
     lgen: LabelledGeneric.Aux[T, G],
     sorted: Lazy[Aux[T :+: S, G, C]]
@@ -79,17 +65,7 @@ trait GenTraversableSorted extends GenericSorted {
   ): Aux[S, GT[T], GT[T] :+: C] = new Sorted[S, GT[T]] { type Out = GT[T]:+:C }
 }
 
-/*trait GenTraversableSortedAvoidDuplicateContent extends GenTraversableSorted {
-  implicit def sortedGenTravSkipT[S <: Coproduct, T, GT[X] <: GenTraversable[X], C <: Coproduct](implicit
-    present: Selector[S, T]
-  ): Aux[S, GT[T], GT[T] :+: CNil] = new Sorted[S, GT[T]] { type Out = GT[T]:+:CNil }
-}*/
-
-object Sorted extends GenTraversableSorted { //GenTraversableSortedAvoidDuplicateContent {
-  /*implicit def sortedSkipGenTrav[S <: Coproduct, T, GT[X] <: GenTraversable[X], C <: Coproduct](implicit
-    present: Selector[S, GT[T]]
-  ): Aux[S, GT[T], CNil] = new Sorted[S, GT[T]] { type Out = CNil }*/
-  
+object Sorted extends GenTraversableSorted {   
   implicit def sortedSkip[S <: Coproduct, T, C <: Coproduct](implicit
     present: Selector[S, T]
   ): Aux[S, T, CNil] = new Sorted[S, T] { type Out = CNil }
