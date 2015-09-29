@@ -22,8 +22,8 @@ object ShapelessUnificationBuild extends Build {
         Seq(
           "-feature",
           "-unchecked",
-          "-deprecation"//,
-          //"-Xlog-implicits"
+          "-deprecation"/*,
+          "-Xlog-implicits"*/
         ),
       scalaVersion := "2.11.7",
       libraryDependencies ++=
